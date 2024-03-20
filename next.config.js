@@ -14,10 +14,10 @@ if (isGithubActions) {
 
 
 const nextConfig = {
-  basePath,
-  assetPrefix,
   output: "export",
   reactStrictMode: true,
+  basePath,
+  assetPrefix,
   images: {
     domains: ['assets.manifold.xyz']
   },
