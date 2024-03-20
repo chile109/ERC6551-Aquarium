@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "static",
+  basePath: "/ERC6551-Aquarium",
+  output: "export",
   reactStrictMode: true,
   images: {
     domains: ['assets.manifold.xyz']
