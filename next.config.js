@@ -1,23 +1,10 @@
 /** @type {import('next').NextConfig} */
 
-const isGithubActions = process.env.GITHUB_ACTIONS || false;
-let assetPrefix = "";
-let basePath = "";
-
-if (isGithubActions) {
-  // 去掉 `<owner>/`
-  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, "");
-
-  assetPrefix = `/${repo}/`;
-  basePath = `/${repo}`;
-}
-
+const isProd = process.env.NODE_ENV === 'production'
 
 const nextConfig = {
-  output: "export",
+  output: isProd ? 'export' : undefined,
   reactStrictMode: true,
-  basePath,
-  assetPrefix,
   images: {
     domains: ['assets.manifold.xyz']
   },
@@ -25,6 +12,9 @@ const nextConfig = {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;
   },
+  assetPrefix: isProd
+    ? 'https://chile109.github.io/ERC6551-Aquarium/'
+    : undefined
 };
 
 module.exports = nextConfig;
