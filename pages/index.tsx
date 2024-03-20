@@ -15,6 +15,7 @@ import NFTCard from '../components/NFTCard';
 import BouncingBall from '../components/BouncingBall';
 import { NFTData, aquariumDataType } from '../types/ensDataType';
 import { useEthersSigner } from "../hooks/useEthersSigner";
+import useIsMounted from '../hooks/useIsMounted';
 
 const DEFAULT_ACCOUNT: TBAccountParams = {
   tokenContract: "0x",
@@ -35,7 +36,7 @@ const Home: NextPage = () => {
   const [imgUrl, setImgUrl] = useState('')
   const [nftData, setNftData] = useState<NFTData | null>(null);
   const [aquariumData, setAquariumData] = useState<aquariumDataType | null>(null);
-  const { nfts } = useGetNFT(chain, identifier, tba_contract_address)
+  const mounted = useIsMounted();
   const { address } = useAccount();
 
   // Get NFTs (by account)
@@ -103,9 +104,6 @@ const Home: NextPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [TBAccount]);
 
-  if (nfts === undefined) {
-    return null;
-  }
 
   return (
     <main className="...">
@@ -127,10 +125,10 @@ const Home: NextPage = () => {
       ></Image>)}
       <div className="...">
         <div onClick={() => setIsOpen(!isOpen)}>
-          <WrapWalletLink />
+          {mounted ? <WrapWalletLink /> : null}
         </div>
         <AquariumBag nftData={nftData} />
-        <SidebarMenu signer={signer} aquariumData={aquariumData} />
+        {mounted ? <SidebarMenu signer={signer} aquariumData={aquariumData} /> : null}
         {isOpen ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <Paper
@@ -157,8 +155,7 @@ const Home: NextPage = () => {
               ></Image>
               <Container sx={{ py: 2 }} maxWidth="md">
                 <Grid container justifyContent="center" alignItems="center">
-                  <ConnectButton />
-                </Grid>
+                  {mounted ? <ConnectButton /> : null}                </Grid>
                 <TextField fullWidth label="Type TBA address" id="addInput"
                   InputLabelProps={{ style: { color: 'white' } }}
                   color='secondary'
@@ -200,7 +197,7 @@ const Home: NextPage = () => {
                 }}
                   onClick={() => setAdd(addressInput)} >Fetch fish
                 </Button> */}
-                {address && address ? (<Typography variant='h3' align='center' sx={{
+                {mounted && address ? (<Typography variant='h3' align='center' sx={{
                   color: 'white',
                   mb: '1rem'
                 }}>My Aquarium</Typography>) : null}
